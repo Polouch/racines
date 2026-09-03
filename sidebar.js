@@ -29,6 +29,7 @@ class SiteSidebar extends HTMLElement {
             <li><a href="nos-actions.html" class="${currentPath === 'nos-actions.html' ? 'active' : ''}">Nos actions</a></li>
             <li><a href="en-construction.html?section=videos" class="${currentPath === 'en-construction.html' && currentSearch.includes('section=videos') ? 'active' : ''}">Vidéos</a></li>
             <li><a href="en-construction.html?section=diy" class="${currentPath === 'en-construction.html' && currentSearch.includes('section=diy') ? 'active' : ''}">Le faire soi-même</a></li>
+            <li><a href="en-construction.html?section=ref" class="${currentPath === 'en-construction.html' && currentSearch.includes('section=ref') ? 'active' : ''}">Références et articles</a></li>
             <li><a href="index.html#contact">Contact</a></li>
           </ul>
         </nav>
