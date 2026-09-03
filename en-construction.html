@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<script src="sidebar.js" defer></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page en construction — RACINES</title>
+<meta name="description" content="Cette section est en cours de création par l'association RACINES à Ranville.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:      #f8f5ee;
+    --bark:       #4a3426;
+    --bark-soft:  #6b5643;
+    --forest:     #2f5233;
+    --leaf:       #6b9b47;
+    --leaf-pale:  #d9e6c9;
+    --sun:        #f2a13a;
+    --line:       rgba(74,52,38,0.14);
+    --sidebar-w:  252px;
+    --topbar-h:   60px;
+  }
+
+  *{ box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--bark);
+    font-family:'Work Sans', sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  h1, h2, .brand{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    color:var(--forest);
+    letter-spacing:-0.01em;
+  }
+
+  a{ color:inherit; }
+
+  /* ---------- Sidebar ---------- */
+  .sidebar{
+    position:fixed;
+    top:0; left:0; bottom:0;
+    width:var(--sidebar-w);
+    background:#fff;
+    border-right:1px solid var(--line);
+    padding:1.8rem 1.4rem;
+    display:flex;
+    flex-direction:column;
+    gap:2.2rem;
+    overflow-y:auto;
+    z-index:40;
+    transition:transform 0.22s ease;
+  }
+
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:0.7rem;
+    font-size:1.12rem;
+    text-decoration:none;
+  }
+
+  .brand img{ width:42px; height:42px; border-radius:50%; flex-shrink:0; }
+
+  .nav-list{
+    display:flex;
+    flex-direction:column;
+    list-style:none;
+    margin:0;
+    padding:0;
+    gap:0.2rem;
+  }
+
+  .nav-list a{
+    display:block;
+    text-decoration:none;
+    font-size:0.96rem;
+    color:var(--bark-soft);
+    padding:0.6rem 0.75rem;
+    border-radius:9px;
+    transition:background 0.15s ease, color 0.15s ease;
+  }
+
+  .nav-list a:hover, .nav-list a.active{
+    background:var(--leaf-pale);
+    color:var(--forest);
+    font-weight:500;
+  }
+
+  .sidebar-foot{
+    margin-top:auto;
+    font-size:0.8rem;
+    color:var(--bark-soft);
+    opacity:0.75;
+  }
+
+  /* ---------- Topbar (mobile) ---------- */
+  .topbar{
+    display:none;
+    position:fixed;
+    top:0; left:0; right:0;
+    height:var(--topbar-h);
+    background:#fff;
+    border-bottom:1px solid var(--line);
+    align-items:center;
+    justify-content:space-between;
+    padding:0 1.2rem;
+    z-index:50;
+  }
+
+  .topbar .brand{ font-size:1.02rem; }
+  .topbar .brand img{ width:32px; height:32px; }
+
+  .nav-toggle{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    gap:5px;
+    width:38px;
+    height:38px;
+    border:1px solid var(--line);
+    border-radius:9px;
+    background:#fff;
+    cursor:pointer;
+  }
+
+  .nav-toggle span{
+    display:block;
+    height:2px;
+    width:18px;
+    margin:0 auto;
+    background:var(--forest);
+    border-radius:2px;
+  }
+
+  .overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(74,52,38,0.35);
+    z-index:39;
+  }
+
+  .overlay.open{ display:block; }
+
+  /* ---------- Page Layout ---------- */
+  .page{
+    margin-left:var(--sidebar-w);
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+
+  .construction-content{
+    max-width:600px;
+    margin:auto;
+    padding:3rem 1.5rem;
+    text-align:center;
+  }
+
+  .icon-badge{
+    display:inline-block;
+    font-size:3rem;
+    background:var(--leaf-pale);
+    width:80px;
+    height:80px;
+    line-height:80px;
+    border-radius:50%;
+    margin-bottom:1.5rem;
+  }
+
+  h1{
+    font-size:clamp(1.8rem, 4vw, 2.4rem);
+    margin:0 0 1rem;
+  }
+
+  p{
+    color:var(--bark-soft);
+    font-size:1.05rem;
+    margin-bottom:2rem;
+  }
+
+  .btn{
+    display:inline-block;
+    padding:0.75rem 1.5rem;
+    border-radius:999px;
+    text-decoration:none;
+    font-weight:500;
+    font-size:0.95rem;
+    background:var(--forest);
+    color:var(--cream);
+    box-shadow:0 10px 22px -10px rgba(47,82,51,0.55);
+    transition:transform 0.15s ease;
+  }
+
+  .btn:hover{
+    transform:translateY(-2px);
+  }
+
+  /* ---------- Footer ---------- */
+  footer{
+    max-width:1100px;
+    width:100%;
+    margin:0 auto;
+    padding:2.2rem 1.5rem 2.8rem;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:0.8rem;
+    color:var(--bark-soft);
+    font-size:0.86rem;
+  }
+
+  /* ---------- Mobile ---------- */
+  @media (max-width:900px){
+    .topbar{ display:flex; }
+    .sidebar{
+      top:0;
+      transform:translateX(-100%);
+      box-shadow:0 0 40px rgba(74,52,38,0.25);
+      padding-top:1.4rem;
+    }
+    .sidebar.open{ transform:translateX(0); }
+    .sidebar > .brand{ display:none; }
+    .page{
+      margin-left:0;
+      padding-top:var(--topbar-h);
+    }
+  }
+</style>
+</head>
+<body>
+
+  <site-sidebar></site-sidebar>
+
+  <div class="page">
+    <main class="construction-content">
+      <div class="icon-badge">🌱</div>
+      <h1 id="pageTitle">Page en construction</h1>
+      <p id="pageText">Cette section est en cours de création. Nous y préparons des contenus inspirants qui seront disponibles très bientôt !</p>
+      <a href="index.html" class="btn">Retour à l'accueil</a>
+    </main>
+
+    <footer>
+      <span>© 2026 RACINES — Ranville</span>
+      <span>ranville.racines@gmail.com</span>
+    </footer>
+  </div>
+
+  <script>
+    // Personnalise le titre selon qu'il s'agisse de "videos" ou "faire-soi-meme"
+    const params = new URLSearchParams(window.location.search);
+    const section = params.get('section');
+    
+    if (section === 'videos') {
+      document.title = "Vidéos — RACINES";
+      document.getElementById('pageTitle').textContent = "Section Vidéos en construction";
+      document.getElementById('pageText').textContent = "Nous préparons des vidéos pour vous faire découvrir nos projets et nos actions sur le terrain.";
+    } else if (section === 'diy') {
+      document.title = "Le faire soi-même — RACINES";
+      document.getElementById('pageTitle').textContent = "Section Le faire soi-même en construction";
+      document.getElementById('pageText').textContent = "Des tutoriels, astuces et ateliers pratiques pour fabriquer, réparer et consommer autrement arrivent bientôt !";
+    }
+  </script>
+
+</body>
+</html>
