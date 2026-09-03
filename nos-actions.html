@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<script src="sidebar.js" defer></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nos actions — RACINES</title>
+<meta name="description" content="Agenda des actions à venir et retours sur les événements passés de l'association RACINES à Ranville.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:      #f8f5ee;
+    --bark:       #4a3426;
+    --bark-soft:  #6b5643;
+    --forest:     #2f5233;
+    --leaf:       #6b9b47;
+    --leaf-pale:  #d9e6c9;
+    --sun:        #f2a13a;
+    --line:       rgba(74,52,38,0.14);
+    --sidebar-w:  252px;
+    --topbar-h:   60px;
+  }
+
+  *{ box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--bark);
+    font-family:'Work Sans', sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  h1, h2, h3, .brand{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    color:var(--forest);
+    letter-spacing:-0.01em;
+  }
+
+  a{ color:inherit; }
+
+  /* ---------- Sidebar ---------- */
+  .sidebar{
+    position:fixed;
+    top:0; left:0; bottom:0;
+    width:var(--sidebar-w);
+    background:#fff;
+    border-right:1px solid var(--line);
+    padding:1.8rem 1.4rem;
+    display:flex;
+    flex-direction:column;
+    gap:2.2rem;
+    overflow-y:auto;
+    z-index:40;
+    transition:transform 0.22s ease;
+  }
+
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:0.7rem;
+    font-size:1.12rem;
+    text-decoration:none;
+  }
+
+  .brand img{ width:42px; height:42px; border-radius:50%; flex-shrink:0; }
+
+  .nav-list{
+    display:flex;
+    flex-direction:column;
+    list-style:none;
+    margin:0;
+    padding:0;
+    gap:0.2rem;
+  }
+
+  .nav-list a{
+    display:block;
+    text-decoration:none;
+    font-size:0.96rem;
+    color:var(--bark-soft);
+    padding:0.6rem 0.75rem;
+    border-radius:9px;
+    transition:background 0.15s ease, color 0.15s ease;
+  }
+
+  .nav-list a:hover, .nav-list a.active{
+    background:var(--leaf-pale);
+    color:var(--forest);
+    font-weight:500;
+  }
+
+  .sidebar-foot{
+    margin-top:auto;
+    font-size:0.8rem;
+    color:var(--bark-soft);
+    opacity:0.75;
+  }
+
+  /* ---------- Topbar (mobile) ---------- */
+  .topbar{
+    display:none;
+    position:fixed;
+    top:0; left:0; right:0;
+    height:var(--topbar-h);
+    background:#fff;
+    border-bottom:1px solid var(--line);
+    align-items:center;
+    justify-content:space-between;
+    padding:0 1.2rem;
+    z-index:50;
+  }
+
+  .topbar .brand{ font-size:1.02rem; }
+  .topbar .brand img{ width:32px; height:32px; }
+
+  .nav-toggle{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    gap:5px;
+    width:38px;
+    height:38px;
+    border:1px solid var(--line);
+    border-radius:9px;
+    background:#fff;
+    cursor:pointer;
+  }
+
+  .nav-toggle span{
+    display:block;
+    height:2px;
+    width:18px;
+    margin:0 auto;
+    background:var(--forest);
+    border-radius:2px;
+  }
+
+  .overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(74,52,38,0.35);
+    z-index:39;
+  }
+
+  .overlay.open{ display:block; }
+
+  /* ---------- Page Layout ---------- */
+  .page{
+    margin-left:var(--sidebar-w);
+  }
+
+  .header-section{
+    max-width:800px;
+    margin:0 auto;
+    padding:3.4rem 1.5rem 1.5rem;
+    text-align:center;
+  }
+
+  h1{
+    font-size:clamp(2rem, 4.6vw, 2.7rem);
+    margin:0 0 0.8rem;
+  }
+
+  .lead{
+    color:var(--bark-soft);
+    font-size:1.08rem;
+    margin:0 auto;
+    max-width:600px;
+  }
+
+  .container{
+    max-width:800px;
+    margin:0 auto;
+    padding:1rem 1.5rem 4rem;
+  }
+
+  .section-title{
+    font-size:1.4rem;
+    margin:2.5rem 0 1.2rem;
+    display:flex;
+    align-items:center;
+    gap:0.8rem;
+  }
+
+  .section-title::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:var(--line);
+  }
+
+  /* ---------- Cards ---------- */
+  .events-grid{
+    display:flex;
+    flex-direction:column;
+    gap:1.2rem;
+  }
+
+  .event-card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:1.4rem 1.6rem;
+    display:grid;
+    grid-template-columns:80px 1fr;
+    gap:1.4rem;
+    align-items:start;
+    transition:transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .event-card:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 24px -10px rgba(74,52,38,0.12);
+  }
+
+  .date-badge{
+    background:var(--leaf-pale);
+    color:var(--forest);
+    padding:0.6rem;
+    border-radius:12px;
+    text-align:center;
+  }
+
+  .date-badge .day{
+    display:block;
+    font-family:'Fraunces', serif;
+    font-size:1.5rem;
+    font-weight:600;
+    line-height:1;
+  }
+
+  .date-badge .month{
+    display:block;
+    font-size:0.75rem;
+    text-transform:uppercase;
+    font-weight:600;
+    margin-top:0.2rem;
+    letter-spacing:0.05em;
+  }
+
+  .event-details h3{
+    margin:0 0 0.4rem;
+    font-size:1.15rem;
+  }
+
+  .event-meta{
+    font-size:0.86rem;
+    color:var(--bark-soft);
+    margin-bottom:0.6rem;
+    display:flex;
+    gap:1rem;
+    flex-wrap:wrap;
+  }
+
+  .event-description{
+    font-size:0.95rem;
+    color:var(--bark-soft);
+    margin:0;
+  }
+
+  /* Style des actions passées */
+  .event-card.past{
+    background:rgba(255,255,255,0.6);
+  }
+
+  .event-card.past .date-badge{
+    background:rgba(74,52,38,0.08);
+    color:var(--bark-soft);
+  }
+
+  .badge-tag{
+    display:inline-block;
+    padding:0.2rem 0.6rem;
+    border-radius:999px;
+    font-size:0.75rem;
+    font-weight:500;
+    margin-top:0.8rem;
+    background:var(--cream);
+    color:var(--bark-soft);
+    border:1px solid var(--line);
+  }
+
+  /* ---------- Footer ---------- */
+  footer{
+    max-width:1100px;
+    margin:0 auto;
+    padding:2.2rem 1.5rem 2.8rem;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:0.8rem;
+    color:var(--bark-soft);
+    font-size:0.86rem;
+  }
+
+  /* ---------- Mobile ---------- */
+  @media (max-width:900px){
+    .topbar{ display:flex; }
+    .sidebar{
+      top:0;
+      transform:translateX(-100%);
+      box-shadow:0 0 40px rgba(74,52,38,0.25);
+      padding-top:1.4rem;
+    }
+    .sidebar.open{ transform:translateX(0); }
+    .sidebar > .brand{ display:none; }
+    .page{
+      margin-left:0;
+      padding-top:var(--topbar-h);
+    }
+  }
+
+  @media (max-width:580px){
+    .event-card{
+      grid-template-columns:1fr;
+      gap:0.8rem;
+    }
+    .date-badge{
+      display:inline-flex;
+      gap:0.5rem;
+      align-items:center;
+      width:fit-content;
+      padding:0.4rem 0.8rem;
+    }
+    .date-badge .day{ font-size:1.1rem; }
+    .date-badge .month{ margin-top:0; }
+  }
+</style>
+</head>
+<body>
+
+  <site-sidebar></site-sidebar>
+
+  <div class="page">
+    <header class="header-section">
+      <h1>Nos Actions</h1>
+      <p class="lead">Retrouvez les événements à venir et le bilan des initiatives citoyennes menées à Ranville.</p>
+    </header>
+
+    <main class="container">
+      
+      <!-- Événements à venir -->
+      <h2 class="section-title">🌱 Prochains événements</h2>
+      <div class="events-grid">
+
+        <article class="event-card">
+          <div class="date-badge">
+            <span class="day">5</span>
+            <span class="month">Sept</span>
+          </div>
+          <div class="event-details">
+            <h3>Forum des Associations</h3>
+            <div class="event-meta">
+              <span>📍 Salle des fêtes George Brassens à Amfreville</span>
+              <span>🕒 à partir 09h00</span>
+            </div>
+            <p class="event-description">Parce que les petits gestes, les idées et les projets collectifs peuvent faire une vraie différence… Venez échanger avec nous, découvrir RACINES et pourquoi pas rejoindre l’aventure !</p>
+            <span class="badge-tag">Forum</span>
+          </div>
+        </article>
+        
+        <article class="event-card">
+          <div class="date-badge">
+            <span class="day">10</span>
+            <span class="month">Oct</span>
+          </div>
+          <div class="event-details">
+            <h3>Octobre Rose, Ensemble contre le cancer</h3>
+            <div class="event-meta">
+              <span>📍 Mairie de Ranville</span>
+              <span>🕒 09h30</span>
+            </div>
+            <p class="event-description">Racines propose une activité "Clean Up solidaire" (nettoyons la nature ensemble).</p>
+            <p class="event-description">Les foulées Ranvillaises et Ranville Rando proposeront une activité footing et marche.</p>
+            <p class="event-description">5 euros de participation reversés au centre Baclesse.</p>
+            <span class="badge-tag">Solidarité</span>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- Actions passées -->
+      <h2 class="section-title">🌱 Actions réalisées</h2>
+      <div class="events-grid">
+
+      </div>
+
+    </main>
+
+    <footer>
+      <span>© 2026 RACINES — Ranville</span>
+      <span>ranville.racines@gmail.com</span>
+    </footer>
+  </div>
+
+</body>
+</html>
