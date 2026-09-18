@@ -246,8 +246,8 @@
   <div class="page">
     <main class="construction-content">
       <div class="icon-badge">🌱</div>
-      <h1 id="pageTitle">Page en construction</h1>
-      <p id="pageText">Cette section est en cours de création. Nous y préparons des contenus inspirants qui seront disponibles très bientôt !</p>
+      <h1>Page en construction</h1>
+      <p>Cette rubrique est en cours de création. Nous y préparons du contenu inspirant qui sera disponible très bientôt !</p>
       <a href="index.html" class="btn">Retour à l'accueil</a>
     </main>
 
@@ -256,26 +256,6 @@
       <span>ranville.racines@gmail.com</span>
     </footer>
   </div>
-
-  <script>
-    // Personnalise le titre selon qu'il s'agisse de "videos" ou "faire-soi-meme"
-    const params = new URLSearchParams(window.location.search);
-    const section = params.get('section');
-    
-    if (section === 'videos') {
-      document.title = "Vidéos — RACINES";
-      document.getElementById('pageTitle').textContent = "Section Vidéos en construction";
-      document.getElementById('pageText').textContent = "Nous préparons des vidéos pour vous faire découvrir nos projets et nos actions sur le terrain.";
-    } else if (section === 'diy') {
-      document.title = "Le faire soi-même — RACINES";
-      document.getElementById('pageTitle').textContent = "Section Le faire soi-même en construction";
-      document.getElementById('pageText').textContent = "Des tutoriels, astuces et ateliers pratiques pour fabriquer, réparer et consommer autrement arrivent bientôt !";
-    } else if (section === 'ref') {
-      document.title = "Références et articles — RACINES";
-      document.getElementById('pageTitle').textContent = "Références et articles en construction";
-      document.getElementById('pageText').textContent = "Des articles, des liens vers des sites, des documents sur le sujet !";
-    }
-  </script>
 
 </body>
 </html>

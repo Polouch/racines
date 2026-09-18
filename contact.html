@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<script src="sidebar.js" defer></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact & Soutien — RACINES</title>
+<meta name="description" content="Contactez l'association RACINES à Ranville, adhérez ou faites un don pour soutenir nos actions citoyennes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:      #f8f5ee;
+    --bark:       #4a3426;
+    --bark-soft:  #6b5643;
+    --forest:     #2f5233;
+    --leaf:       #6b9b47;
+    --leaf-pale:  #d9e6c9;
+    --sun:        #f2a13a;
+    --line:       rgba(74,52,38,0.14);
+    --sidebar-w:  252px;
+    --topbar-h:   60px;
+  }
+
+  *{ box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--bark);
+    font-family:'Work Sans', sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  h1, h2, h3, .brand{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    color:var(--forest);
+    letter-spacing:-0.01em;
+  }
+
+  a{ color:inherit; }
+
+  /* ---------- Styles du composant Sidebar ---------- */
+  site-sidebar .sidebar {
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    width: var(--sidebar-w);
+    background: #fff;
+    border-right: 1px solid var(--line);
+    padding: 1.8rem 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2.2rem;
+    overflow-y: auto;
+    z-index: 40;
+    transition: transform 0.22s ease;
+  }
+
+  site-sidebar .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    font-size: 1.12rem;
+    text-decoration: none;
+  }
+
+  site-sidebar .brand img {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  site-sidebar .nav-list {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 0.2rem;
+  }
+
+  site-sidebar .nav-list a {
+    display: block;
+    text-decoration: none;
+    font-size: 0.96rem;
+    color: var(--bark-soft);
+    padding: 0.6rem 0.75rem;
+    border-radius: 9px;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  site-sidebar .nav-list a:hover,
+  site-sidebar .nav-list a.active {
+    background: var(--leaf-pale);
+    color: var(--forest);
+    font-weight: 500;
+  }
+
+  site-sidebar .sidebar-foot {
+    margin-top: auto;
+    font-size: 0.8rem;
+    color: var(--bark-soft);
+    opacity: 0.75;
+  }
+
+  site-sidebar .topbar {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: var(--topbar-h);
+    background: #fff;
+    border-bottom: 1px solid var(--line);
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.2rem;
+    z-index: 50;
+  }
+
+  site-sidebar .topbar .brand { font-size: 1.02rem; }
+  site-sidebar .topbar .brand img { width: 32px; height: 32px; }
+
+  site-sidebar .nav-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 38px;
+    height: 38px;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    background: #fff;
+    cursor: pointer;
+  }
+
+  site-sidebar .nav-toggle span {
+    display: block;
+    height: 2px;
+    width: 18px;
+    margin: 0 auto;
+    background: var(--forest);
+    border-radius: 2px;
+  }
+
+  site-sidebar .overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(74, 52, 38, 0.35);
+    z-index: 39;
+  }
+
+  site-sidebar .overlay.open { display: block; }
+
+  /* ---------- Layout Page ---------- */
+  .page {
+    margin-left: var(--sidebar-w);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .header-section {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 3.4rem 1.5rem 1.5rem;
+    text-align: center;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 4.6vw, 2.7rem);
+    margin: 0 0 0.8rem;
+  }
+
+  .lead {
+    color: var(--bark-soft);
+    font-size: 1.08rem;
+    margin: 0 auto;
+    max-width: 600px;
+  }
+
+  .container {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 1rem 1.5rem 4rem;
+    width: 100%;
+  }
+
+  /* ---------- Contact Card ---------- */
+  .contact-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 2.2rem;
+    text-align: center;
+    box-shadow: 0 8px 24px -10px rgba(74, 52, 38, 0.08);
+    margin-bottom: 2.5rem;
+  }
+
+  .contact-card h2 {
+    font-size: 1.4rem;
+    margin-top: 0;
+    margin-bottom: 0.6rem;
+  }
+
+  .email-link {
+    display: inline-block;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--forest);
+    text-decoration: none;
+    background: var(--leaf-pale);
+    padding: 0.7rem 1.4rem;
+    border-radius: 99px;
+    margin-top: 0.8rem;
+    transition: transform 0.15s ease, background 0.15s ease;
+  }
+
+  .email-link:hover {
+    transform: translateY(-2px);
+    background: #cbe0b6;
+  }
+
+  /* ---------- Support Cards ---------- */
+  .support-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .support-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 1.8rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .support-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 28px -10px rgba(74, 52, 38, 0.12);
+  }
+
+  .support-card h3 {
+    font-size: 1.25rem;
+    margin: 0 0 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .support-card p {
+    color: var(--bark-soft);
+    font-size: 0.95rem;
+    margin: 0 0 1.5rem;
+  }
+
+  .btn {
+    display: inline-block;
+    text-align: center;
+    padding: 0.8rem 1.4rem;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  }
+
+  .btn-primary {
+    background: var(--forest);
+    color: var(--cream);
+    box-shadow: 0 8px 18px -8px rgba(47, 82, 51, 0.5);
+  }
+
+  .btn-primary:hover {
+    background: #244127;
+  }
+
+  .btn-accent {
+    background: var(--sun);
+    color: #fff;
+    box-shadow: 0 8px 18px -8px rgba(242, 161, 58, 0.5);
+  }
+
+  .btn-accent:hover {
+    background: #e09028;
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--forest);
+    border: 1.5px solid var(--forest);
+  }
+
+  .btn-outline:hover {
+    background: var(--leaf-pale);
+  }
+
+  /* ---------- Modal ---------- */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(74, 52, 38, 0.5);
+    backdrop-filter: blur(3px);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal-content {
+    background: #fff;
+    border-radius: 20px;
+    padding: 2.2rem;
+    max-width: 480px;
+    width: 100%;
+    position: relative;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    animation: popIn 0.2s ease-out;
+  }
+
+  @keyframes popIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 1rem; right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--bark-soft);
+    line-height: 1;
+    padding: 0.2rem 0.5rem;
+  }
+
+  .modal-content h3 {
+    font-size: 1.4rem;
+    margin-top: 0;
+    margin-bottom: 0.6rem;
+  }
+
+  .modal-content p {
+    color: var(--bark-soft);
+    font-size: 0.95rem;
+    margin-bottom: 1.8rem;
+  }
+
+  .modal-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .btn.disabled,
+  .btn[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none; /* Empêche le clic */
+  }
+
+  /* ---------- Footer ---------- */
+  footer {
+    max-width: 1100px;
+    width: 100%;
+    margin: auto auto 0;
+    padding: 2.2rem 1.5rem 2.8rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    color: var(--bark-soft);
+    font-size: 0.86rem;
+  }
+
+  /* ---------- Mobile ---------- */
+  @media (max-width: 900px) {
+    site-sidebar .topbar { display: flex; }
+    site-sidebar .sidebar {
+      top: 0;
+      transform: translateX(-100%);
+      box-shadow: 0 0 40px rgba(74, 52, 38, 0.25);
+      padding-top: 1.4rem;
+    }
+    site-sidebar .sidebar.open { transform: translateX(0); }
+    site-sidebar .sidebar > .brand { display: none; }
+    .page {
+      margin-left: 0;
+      padding-top: var(--topbar-h);
+    }
+  }
+</style>
+</head>
+<body>
+
+  <site-sidebar></site-sidebar>
+
+  <div class="page">
+    <header class="header-section">
+      <h1>Contact & Soutien</h1>
+      <p class="lead">Une question, un projet ou l'envie de vous engager à nos côtés ? Écrivez-nous ou soutenez les projets de l'association RACINES.</p>
+    </header>
+
+    <main class="container">
+      
+      <!-- Section Adresse Mail -->
+      <div class="contact-card">
+        <h2>📩 Nous contacter par e-mail</h2>
+        <p>Pour toute demande d'information, suggestion ou partenariat :</p>
+        <a href="mailto:ranville.racines@gmail.com" class="email-link">ranville.racines@gmail.com</a>
+      </div>
+
+      <!-- Section Actions -->
+      <div class="support-grid">
+
+        <!-- Carte Adhésion -->
+        <div class="support-card">
+          <div>
+            <h3>🌱 Bulletin d'adhésion</h3>
+            <p>Rejoignez l'association pour participer activement aux initiatives citoyennes et faire grandir nos projets locaux.</p>
+          </div>
+          <button id="openAdhesionModal" class="btn btn-primary">Adhérer à l'association</button>
+        </div>
+
+        <!-- Carte Don -->
+        <div class="support-card">
+          <div>
+            <h3>🧡 Faire un don</h3>
+            <p>Soutenez financièrement nos actions pour le cadre de vie, l'environnement et l'économie solidaire à Ranville.</p>
+          </div>
+          <!-- Remplacez le lien ci-dessous par votre propre lien HelloAsso -->
+	  <a href="https://www.helloasso.com/associations/racines-14/formulaires/1" class="btn btn-accent" tabindex="-1" aria-disabled="true">Faire un don</a>
+        </div>
+
+      </div>
+
+    </main>
+
+    <footer>
+      <span>© 2026 RACINES — Ranville</span>
+      <span>ranville.racines@gmail.com</span>
+    </footer>
+  </div>
+
+  <!-- Popup / Modal Choix d'Adhésion -->
+  <div class="modal-overlay" id="adhesionModal">
+    <div class="modal-content">
+      <button class="modal-close" id="closeAdhesionModal" aria-label="Fermer">&times;</button>
+      <h3>Comment souhaitez-vous adhérer ?</h3>
+      <p>Choisissez l'option qui vous convient le mieux :</p>
+      
+      <div class="modal-actions">
+        <!-- Option 1 : HelloAsso -->
+	<a href="https://www.helloasso.com/associations/racines-14/adhesions/adhesion-annuelle" class="btn btn-primary" tabindex="-1" aria-disabled="true">
+  	   Adhérer en ligne
+	</a>
+        
+        <!-- Option 2 : Téléchargement PDF -->
+	<a href="assets/bulletin-adhesion.pdf" target="_blank" class="btn btn-outline onclick="hideModal()">
+  	  📄 Télécharger le bulletin papier (PDF)
+	</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const modal = document.getElementById('adhesionModal');
+    const openBtn = document.getElementById('openAdhesionModal');
+    const closeBtn = document.getElementById('closeAdhesionModal');
+
+    // Ouvrir la popup
+    openBtn.addEventListener('click', () => {
+      modal.classList.add('open');
+    });
+
+    // Fermer avec la croix
+    closeBtn.addEventListener('click', () => {
+      modal.classList.remove('open');
+    });
+
+    // Fermer en cliquant en dehors de la popup
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('open');
+      }
+    });
+  </script>
+
+</body>
+</html>
