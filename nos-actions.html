@@ -204,16 +204,25 @@
     gap:1.2rem;
   }
 
-  .event-card{
-    background:#fff;
-    border:1px solid var(--line);
-    border-radius:14px;
-    padding:1.4rem 1.6rem;
-    display:grid;
-    grid-template-columns:80px 1fr;
-    gap:1.4rem;
-    align-items:start;
-    transition:transform 0.15s ease, box-shadow 0.15s ease;
+  .event-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 1.4rem 1.6rem;
+    display: grid;
+    grid-template-columns: max-content 1fr; /* S'ajuste exactement à la largeur du badge */
+    gap: 1.4rem;
+    align-items: start;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  /* 2. Réduire les marges horizontales de l'encadré */
+  .date-badge {
+    background: var(--leaf-pale);
+    color: var(--forest);
+    padding: 0.5rem 0.5rem; /* 0.5rem haut/bas, 0.2rem gauche/droite */
+    border-radius: 12px;
+    text-align: center;
   }
 
   .event-card:hover{
@@ -221,16 +230,15 @@
     box-shadow:0 8px 24px -10px rgba(74,52,38,0.12);
   }
 
-  .date-badge{
-    background:var(--leaf-pale);
-    color:var(--forest);
-    padding:0.6rem;
-    border-radius:12px;
-    text-align:center;
+  .date-day-month{
+    display:flex;
+    align-items:baseline;
+    justify-content:center;
+    gap:0.3rem;
   }
 
   .date-badge .day{
-    display:block;
+    display:inline-block;
     font-family:'Fraunces', serif;
     font-size:1.5rem;
     font-weight:600;
@@ -238,12 +246,19 @@
   }
 
   .date-badge .month{
-    display:block;
+    display:inline-block;
     font-size:0.75rem;
     text-transform:uppercase;
     font-weight:600;
-    margin-top:0.2rem;
     letter-spacing:0.05em;
+  }
+
+  .date-badge .year{
+    display:block;
+    font-size:0.7rem;
+    font-weight:500;
+    opacity:0.85;
+    margin-top:0.2rem;
   }
 
   .event-details h3{
@@ -263,7 +278,87 @@
   .event-description{
     font-size:0.95rem;
     color:var(--bark-soft);
-    margin:0;
+    margin:0 0 0.4rem;
+  }
+
+  .event-description:last-of-type{
+    margin-bottom:0;
+  }
+
+  .event-thumb-container{
+    margin:0.8rem 0;
+  }
+
+  .event-thumb{
+    width:100%;
+    max-width:180px;
+    border-radius:10px;
+    border:1px solid var(--line);
+    box-shadow:0 4px 12px rgba(74,52,38,0.08);
+    object-fit:cover;
+    display:block;
+    cursor:pointer;
+    transition:transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .event-thumb:hover{
+    transform:scale(1.02);
+    box-shadow:0 6px 16px rgba(74,52,38,0.15);
+  }
+
+  /* ---------- Modal Lightbox ---------- */
+  .img-modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.8);
+    backdrop-filter:blur(4px);
+    z-index:1000;
+    align-items:center;
+    justify-content:center;
+    padding:1.5rem;
+    cursor:zoom-out;
+  }
+
+  .img-modal.open{
+    display:flex;
+    animation:fadeIn 0.2s ease-out;
+  }
+
+  .img-modal-content{
+    max-width:90vw;
+    max-height:90vh;
+    border-radius:12px;
+    box-shadow:0 10px 40px rgba(0,0,0,0.4);
+    object-fit:contain;
+    cursor:default;
+  }
+
+  .img-modal-close{
+    position:absolute;
+    top:1.5rem;
+    right:1.5rem;
+    background:rgba(255,255,255,0.2);
+    color:#fff;
+    border:none;
+    border-radius:50%;
+    width:40px;
+    height:40px;
+    font-size:1.5rem;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:background 0.2s ease;
+  }
+
+  .img-modal-close:hover{
+    background:rgba(255,255,255,0.4);
+  }
+
+  @keyframes fadeIn{
+    from{ opacity:0; }
+    to{ opacity:1; }
   }
 
   /* Style des actions passées */
@@ -326,13 +421,11 @@
     }
     .date-badge{
       display:inline-flex;
-      gap:0.5rem;
+      flex-direction:column;
       align-items:center;
       width:fit-content;
       padding:0.4rem 0.8rem;
     }
-    .date-badge .day{ font-size:1.1rem; }
-    .date-badge .month{ margin-top:0; }
   }
 </style>
 </head>
@@ -342,7 +435,7 @@
 
   <div class="page">
     <header class="header-section">
-      <h1>Nos Actions</h1>
+      <h1>Nos Actions et autres évènements</h1>
       <p class="lead">Retrouvez les événements à venir et le bilan des initiatives citoyennes menées à Ranville.</p>
     </header>
 
@@ -352,26 +445,40 @@
       <h2 class="section-title">🌱 Prochains événements</h2>
       <div class="events-grid">
 
+        <!-- Événement Exposition -->
         <article class="event-card">
           <div class="date-badge">
-            <span class="day">5</span>
-            <span class="month">Sept</span>
+            <div class="date-day-month">
+              <span class="day">21</span>
+              <span class="month">Sep</span>
+            </div>
+            <span class="year">2026</span>
           </div>
           <div class="event-details">
-            <h3>Forum des Associations</h3>
+            <h3>Exposition « À portée de regard » — Zoé Gérard</h3>
             <div class="event-meta">
-              <span>📍 Salle des fêtes George Brassens à Amfreville</span>
-              <span>🕒 à partir 09h00</span>
+              <span>📍 Bibliothèque Municipale « Le jardin de Papier »</span>
+              <span>🕒 Vernissage le 23 sep à 17h30</span>
             </div>
-            <p class="event-description">Parce que les petits gestes, les idées et les projets collectifs peuvent faire une vraie différence… Venez échanger avec nous, découvrir RACINES et pourquoi pas rejoindre l’aventure !</p>
-            <span class="badge-tag">Forum</span>
+            
+            <div class="event-thumb-container">
+              <img src="assets/PHOTO-2026-09-17-21-19-09.jpg.jpeg" alt="Affiche Exposition À portée de regard" class="event-thumb" onclick="openLightbox(this.src, this.alt)">
+            </div>
+
+            <p class="event-description">Exposition de photos animalières présentée du 21 septembre au 17 octobre.</p>
+            <p class="event-description">Contact : 02.31.78.18.63 — bibliotheque@ranville.fr</p>
+            <span class="badge-tag">Culture & Nature</span>
           </div>
         </article>
-        
+
+        <!-- Événement Octobre Rose -->
         <article class="event-card">
           <div class="date-badge">
-            <span class="day">10</span>
-            <span class="month">Oct</span>
+            <div class="date-day-month">
+              <span class="day">10</span>
+              <span class="month">Oct</span>
+            </div>
+            <span class="year">2026</span>
           </div>
           <div class="event-details">
             <h3>Octobre Rose, Ensemble contre le cancer</h3>
@@ -389,8 +496,27 @@
       </div>
 
       <!-- Actions passées -->
-      <h2 class="section-title">🌱 Actions réalisées</h2>
+      <h2 class="section-title">🥀 Actions réalisées</h2>
       <div class="events-grid">
+      
+        <article class="event-card past">
+          <div class="date-badge">
+            <div class="date-day-month">
+              <span class="day">5</span>
+              <span class="month">Sept</span>
+            </div>
+            <span class="year">2026</span>
+          </div>
+          <div class="event-details">
+            <h3>Forum des Associations</h3>
+            <div class="event-meta">
+              <span>📍 Salle des fêtes George Brassens à Amfreville</span>
+              <span>🕒 à partir 09h00</span>
+            </div>
+            <p class="event-description">Parce que les petits gestes, les idées et les projets collectifs peuvent faire une vraie différence… Venez échanger avec nous, découvrir RACINES et pourquoi pas rejoindre l’aventure !</p>
+            <span class="badge-tag">Forum</span>
+          </div>
+        </article>
 
       </div>
 
@@ -401,6 +527,33 @@
       <span>ranville.racines@gmail.com</span>
     </footer>
   </div>
+
+  <!-- Popup / Lightbox pour agrandir les images -->
+  <div class="img-modal" id="imageModal" onclick="closeLightbox()">
+    <button class="img-modal-close" aria-label="Fermer">&times;</button>
+    <img class="img-modal-content" id="fullImage" alt="" onclick="event.stopPropagation()">
+  </div>
+
+  <script>
+    function openLightbox(src, alt) {
+      const modal = document.getElementById('imageModal');
+      const img = document.getElementById('fullImage');
+      img.src = src;
+      img.alt = alt;
+      modal.classList.add('open');
+    }
+
+    function closeLightbox() {
+      document.getElementById('imageModal').classList.remove('open');
+    }
+
+    // Fermeture avec la touche Échap
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeLightbox();
+      }
+    });
+  </script>
 
 </body>
 </html>
